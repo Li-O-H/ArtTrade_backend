@@ -1,12 +1,106 @@
 package com.itmo.ArtTrade.service;
 
+import com.itmo.ArtTrade.entity.*;
+import com.itmo.ArtTrade.exception.NoSuchDataException;
 import com.itmo.ArtTrade.repository.ItemRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class ItemService {
 
     private ItemRepository itemRepository;
+    private CategoryService categoryService;
+    private UserService userService;
+
+    public Item findById(Long id) {
+        Optional<Item> item = itemRepository.findById(id);
+        if (item.isEmpty()) {
+            throw new NoSuchDataException();
+        }
+        return item.get();
+    }
+
+    public List<Item> findActiveItems(Float min, Float max, Long categoryId) {
+        List<Item> items;
+        if (categoryId != null) {
+            Category category = categoryService.findById(categoryId);
+            items = itemRepository.findAllByStatusAndCategory(Status.ACTIVE, category);
+        } else {
+            items = itemRepository.findAllByStatus(Status.ACTIVE);
+        }
+        if (min == null && max == null) {
+            return items;
+        }
+        if (max != null) {
+            items.removeIf(item -> {
+                List<ItemBid> bids = item.getBids();
+                bids.sort((i1, i2) -> Float.compare(i2.getPrice(), i1.getPrice()));
+                return !bids.isEmpty() && bids.get(0).getPrice() > max;
+            });
+        }
+        if (min != null) {
+            items.removeIf(item -> {
+                List<ItemBid> bids = item.getBids();
+                bids.sort((i1, i2) -> Float.compare(i2.getPrice(), i1.getPrice()));
+                return !bids.isEmpty() && bids.get(0).getPrice() < min;
+            });
+        }
+        return items;
+    }
+
+    public Item save(Item item) {
+        item.setId(null);
+        return itemRepository.save(item);
+    }
+
+    public void addToFavorites(Long userId, Long itemId) {
+        User user = userService.findById(userId);
+        Item item = findById(itemId);
+        if (item.getFavoriteOf().contains(user)) {
+            return;
+        }
+        item.getFavoriteOf()
+                .addAll(Collections.singletonList(user)
+                        .stream()
+                        .map(u -> {
+                            User uu = userService.findById(u.getId());
+                            uu.getFavoriteItems().add(item);
+                            return uu;
+                        }).collect(Collectors.toList()));
+        itemRepository.save(item);
+    }
+
+    public Item update(Item item) {
+        return itemRepository.save(item);
+    }
+
+    public void deleteById(Long id) {
+        if (findById(id).getStatus().equals(Status.HIDDEN)) {
+            itemRepository.deleteById(id);
+        }
+    }
+
+    public void deleteFromFavorites(Long userId, Long itemId) {
+        User user = userService.findById(userId);
+        Item item = findById(itemId);
+        if (item.getFavoriteOf().contains(user)) {
+            return;
+        }
+        item.getFavoriteOf()
+                .removeAll(Collections.singletonList(user)
+                        .stream()
+                        .map(u -> {
+                            User uu = userService.findById(u.getId());
+                            uu.getFavoriteItems().remove(item);
+                            return uu;
+                        }).collect(Collectors.toList()));
+        itemRepository.save(item);
+    }
 }

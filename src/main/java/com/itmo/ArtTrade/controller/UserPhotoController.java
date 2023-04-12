@@ -1,9 +1,10 @@
 package com.itmo.ArtTrade.controller;
 
+import com.itmo.ArtTrade.entity.UserPhoto;
 import com.itmo.ArtTrade.service.UserPhotoService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/userPhoto")
@@ -12,4 +13,14 @@ public class UserPhotoController {
 
     private UserPhotoService userPhotoService;
 
+    @PostMapping
+    public ResponseEntity<?> addUserPhoto(@RequestBody UserPhoto userPhoto) {
+        return ResponseEntity.ok(userPhotoService.save(userPhoto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUserPhoto(@PathVariable Long id) {
+        userPhotoService.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 }

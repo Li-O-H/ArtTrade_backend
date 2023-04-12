@@ -44,6 +44,9 @@ public class Order extends BaseEntity {
     @OneToMany(mappedBy = "order")
     private List<OrderFeedback> feedbacks;
 
+    @OneToMany(mappedBy = "order")
+    private List<OrderBid> bids;
+
     @JsonIgnore
     @ManyToMany(mappedBy = "favoriteItems")
     private List<User> favoriteOf = Collections.emptyList();

@@ -1,9 +1,10 @@
 package com.itmo.ArtTrade.controller;
 
+import com.itmo.ArtTrade.entity.OrderFeedback;
 import com.itmo.ArtTrade.service.OrderFeedbackService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/orderFeedback")
@@ -12,4 +13,14 @@ public class OrderFeedbackController {
 
     private OrderFeedbackService orderFeedbackService;
 
+    @PostMapping
+    public ResponseEntity<?> addOrderFeedback(@RequestBody OrderFeedback orderFeedback) {
+        return ResponseEntity.ok(orderFeedbackService.save(orderFeedback));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteOrderFeedback(@PathVariable Long id) {
+        orderFeedbackService.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 }
