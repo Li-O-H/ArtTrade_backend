@@ -1,10 +1,12 @@
 package com.itmo.ArtTrade.controller;
 
-import com.itmo.ArtTrade.entity.OrderPhoto;
+import com.itmo.ArtTrade.controller.payload.OrderPhotoCreatePayload;
 import com.itmo.ArtTrade.service.OrderPhotoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/orderPhoto")
@@ -14,7 +16,7 @@ public class OrderPhotoController {
     private OrderPhotoService orderPhotoService;
 
     @PostMapping
-    public ResponseEntity<?> addOrderPhoto(@RequestBody OrderPhoto orderPhoto) {
+    public ResponseEntity<?> addOrderPhoto(@RequestBody @Valid OrderPhotoCreatePayload orderPhoto) {
         return ResponseEntity.ok(orderPhotoService.save(orderPhoto));
     }
 

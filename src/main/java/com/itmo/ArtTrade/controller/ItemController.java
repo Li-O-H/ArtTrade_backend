@@ -1,10 +1,13 @@
 package com.itmo.ArtTrade.controller;
 
-import com.itmo.ArtTrade.entity.Item;
+import com.itmo.ArtTrade.controller.payload.ItemCreatePayload;
+import com.itmo.ArtTrade.controller.payload.ItemUpdatePayload;
 import com.itmo.ArtTrade.service.ItemService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/item")
@@ -26,7 +29,7 @@ public class ItemController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addItem(@RequestBody Item item) {
+    public ResponseEntity<?> addItem(@RequestBody @Valid ItemCreatePayload item) {
         return ResponseEntity.ok(itemService.save(item));
     }
 
@@ -38,7 +41,7 @@ public class ItemController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateItem(@RequestBody Item item) {
+    public ResponseEntity<?> updateItem(@RequestBody @Valid ItemUpdatePayload item) {
         return ResponseEntity.ok(itemService.update(item));
     }
 

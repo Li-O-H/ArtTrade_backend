@@ -1,5 +1,7 @@
 package com.itmo.ArtTrade.service;
 
+import com.itmo.ArtTrade.controller.payload.ItemCreatePayload;
+import com.itmo.ArtTrade.controller.payload.ItemUpdatePayload;
 import com.itmo.ArtTrade.entity.*;
 import com.itmo.ArtTrade.exception.NoSuchDataException;
 import com.itmo.ArtTrade.repository.ItemRepository;
@@ -55,8 +57,15 @@ public class ItemService {
         return items;
     }
 
-    public Item save(Item item) {
-        item.setId(null);
+    public Item save(ItemCreatePayload payload) {
+        User user = userService.findById(payload.getUserId());
+        Category category = categoryService.findById(payload.getCategoryId());
+        Item item = new Item()
+                .setTitle(payload.getTitle())
+                .setDescription(payload.getDescription())
+                .setStatus(Status.HIDDEN)
+                .setCategory(category)
+                .setUser(user);
         return itemRepository.save(item);
     }
 
@@ -77,10 +86,14 @@ public class ItemService {
         itemRepository.save(item);
     }
 
-    public Item update(Item newItem) {
-        Item item = findById(newItem.getId());
+    public Item update(ItemUpdatePayload payload) {
+        Item item = findById(payload.getId());
+        Category category = categoryService.findById(payload.getCategoryId());
         if (!item.getStatus().equals(Status.COMPLETED)){
-            item.setTitle(newItem.getTitle()).setDescription(newItem.getDescription());
+            item
+                    .setTitle(payload.getTitle())
+                    .setDescription(payload.getDescription())
+                    .setCategory(category);
             return itemRepository.save(item);
         }
         return item;

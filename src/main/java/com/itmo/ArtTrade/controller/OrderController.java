@@ -1,10 +1,13 @@
 package com.itmo.ArtTrade.controller;
 
-import com.itmo.ArtTrade.entity.Order;
+import com.itmo.ArtTrade.controller.payload.OrderCreatePayload;
+import com.itmo.ArtTrade.controller.payload.OrderUpdatePayload;
 import com.itmo.ArtTrade.service.OrderService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/order")
@@ -26,7 +29,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addOrder(@RequestBody Order order) {
+    public ResponseEntity<?> addOrder(@RequestBody @Valid OrderCreatePayload order) {
         return ResponseEntity.ok(orderService.save(order));
     }
 
@@ -38,7 +41,7 @@ public class OrderController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateOrder(@RequestBody Order order) {
+    public ResponseEntity<?> updateOrder(@RequestBody @Valid OrderUpdatePayload order) {
         return ResponseEntity.ok(orderService.update(order));
     }
 

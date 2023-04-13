@@ -1,10 +1,12 @@
 package com.itmo.ArtTrade.controller;
 
-import com.itmo.ArtTrade.entity.OrderBid;
+import com.itmo.ArtTrade.controller.payload.OrderBidCreatePayload;
 import com.itmo.ArtTrade.service.OrderBidService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/orderBid")
@@ -14,7 +16,7 @@ public class OrderBidController {
     private OrderBidService orderBidService;
 
     @PostMapping
-    public ResponseEntity<?> addOrderBid(@RequestBody OrderBid orderBid) {
+    public ResponseEntity<?> addOrderBid(@RequestBody @Valid OrderBidCreatePayload orderBid) {
         return ResponseEntity.ok(orderBidService.save(orderBid));
     }
 

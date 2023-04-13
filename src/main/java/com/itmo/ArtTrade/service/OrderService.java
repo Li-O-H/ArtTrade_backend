@@ -1,5 +1,7 @@
 package com.itmo.ArtTrade.service;
 
+import com.itmo.ArtTrade.controller.payload.OrderCreatePayload;
+import com.itmo.ArtTrade.controller.payload.OrderUpdatePayload;
 import com.itmo.ArtTrade.entity.*;
 import com.itmo.ArtTrade.exception.NoSuchDataException;
 import com.itmo.ArtTrade.repository.OrderRepository;
@@ -55,8 +57,16 @@ public class OrderService {
         return orders;
     }
 
-    public Order save(Order order) {
-        order.setId(null);
+    public Order save(OrderCreatePayload payload) {
+        User user = userService.findById(payload.getUserId());
+        Category category = categoryService.findById(payload.getCategoryId());
+        Order order = new Order()
+                .setTitle(payload.getTitle())
+                .setDescription(payload.getDescription())
+                .setStatus(Status.HIDDEN)
+                .setDeadline(payload.getDeadline())
+                .setCategory(category)
+                .setUser(user);
         return orderRepository.save(order);
     }
 
@@ -77,10 +87,15 @@ public class OrderService {
         orderRepository.save(order);
     }
 
-    public Order update(Order newOrder) {
-        Order order = findById(newOrder.getId());
+    public Order update(OrderUpdatePayload payload) {
+        Order order = findById(payload.getId());
+        Category category = categoryService.findById(payload.getCategoryId());
         if (!order.getStatus().equals(Status.COMPLETED)){
-            order.setTitle(newOrder.getTitle()).setDescription(newOrder.getDescription()).setDeadline(newOrder.getDeadline());
+            order
+                    .setTitle(payload.getTitle())
+                    .setDescription(payload.getDescription())
+                    .setDeadline(payload.getDeadline())
+                    .setCategory(category);
             return orderRepository.save(order);
         }
         return order;
