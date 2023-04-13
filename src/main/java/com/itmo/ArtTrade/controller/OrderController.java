@@ -42,6 +42,24 @@ public class OrderController {
         return ResponseEntity.ok(orderService.update(order));
     }
 
+    @PutMapping("/{id}/activate")
+    public ResponseEntity<?> activateOrder(@PathVariable Long id) {
+        orderService.activateOrder(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{id}/hide")
+    public ResponseEntity<?> hideOrder(@PathVariable Long id) {
+        orderService.hideOrder(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping(value = "/{id}/complete", params = {"userId"})
+    public ResponseEntity<?> completeOrder(@PathVariable Long id, @RequestParam Long userId) {
+        orderService.completeOrder(id, userId);
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteOrder(@PathVariable Long id) {
         orderService.deleteById(id);

@@ -77,12 +77,39 @@ public class ItemService {
         itemRepository.save(item);
     }
 
-    public Item update(Item item) {
-        return itemRepository.save(item);
+    public Item update(Item newItem) {
+        Item item = findById(newItem.getId());
+        if (!item.getStatus().equals(Status.COMPLETED)){
+            item.setTitle(newItem.getTitle()).setDescription(newItem.getDescription());
+            return itemRepository.save(item);
+        }
+        return item;
+    }
+
+    public void activateItem(Long id) {
+        Item item = findById(id);
+        if (!item.getStatus().equals(Status.COMPLETED)){
+            item.setStatus(Status.ACTIVE);
+            itemRepository.save(item);
+        }
+    }
+
+    public void hideItem(Long id) {
+        Item item = findById(id);
+        if (!item.getStatus().equals(Status.COMPLETED)){
+            item.setStatus(Status.HIDDEN);
+            itemRepository.save(item);
+        }
+    }
+
+    public void completeItem(Long id) {
+        Item item = findById(id);
+        item.setStatus(Status.COMPLETED);
+        itemRepository.save(item);
     }
 
     public void deleteById(Long id) {
-        if (findById(id).getStatus().equals(Status.HIDDEN)) {
+        if (!findById(id).getStatus().equals(Status.COMPLETED)) {
             itemRepository.deleteById(id);
         }
     }

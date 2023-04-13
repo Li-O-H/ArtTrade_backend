@@ -1,5 +1,6 @@
 package com.itmo.ArtTrade.service;
 
+import com.itmo.ArtTrade.entity.Status;
 import com.itmo.ArtTrade.entity.User;
 import com.itmo.ArtTrade.exception.NoSuchDataException;
 import com.itmo.ArtTrade.exception.UserAlreadyExistsException;
@@ -45,5 +46,9 @@ public class UserService {
 
     public User getByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
     }
 }

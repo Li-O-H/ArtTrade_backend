@@ -77,12 +77,41 @@ public class OrderService {
         orderRepository.save(order);
     }
 
-    public Order update(Order order) {
-        return orderRepository.save(order);
+    public Order update(Order newOrder) {
+        Order order = findById(newOrder.getId());
+        if (!order.getStatus().equals(Status.COMPLETED)){
+            order.setTitle(newOrder.getTitle()).setDescription(newOrder.getDescription()).setDeadline(newOrder.getDeadline());
+            return orderRepository.save(order);
+        }
+        return order;
+    }
+
+    public void activateOrder(Long id) {
+        Order order = findById(id);
+        if (!order.getStatus().equals(Status.COMPLETED)){
+            order.setStatus(Status.ACTIVE);
+            orderRepository.save(order);
+        }
+    }
+
+    public void hideOrder(Long id) {
+        Order order = findById(id);
+        if (!order.getStatus().equals(Status.COMPLETED)){
+            order.setStatus(Status.HIDDEN);
+            orderRepository.save(order);
+        }
+    }
+
+    public void completeOrder(Long id, Long userId) {
+        User user = userService.findById(userId);
+        Order order = findById(id);
+        order.setStatus(Status.COMPLETED);
+        order.setDoneBy(user);
+        orderRepository.save(order);
     }
 
     public void deleteById(Long id) {
-        if (findById(id).getStatus().equals(Status.HIDDEN)){
+        if (!findById(id).getStatus().equals(Status.COMPLETED)){
             orderRepository.deleteById(id);
         }
     }

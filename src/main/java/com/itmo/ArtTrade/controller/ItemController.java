@@ -42,6 +42,25 @@ public class ItemController {
         return ResponseEntity.ok(itemService.update(item));
     }
 
+
+    @PutMapping("/{id}/activate")
+    public ResponseEntity<?> activateItem(@PathVariable Long id) {
+        itemService.activateItem(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{id}/hide")
+    public ResponseEntity<?> hideItem(@PathVariable Long id) {
+        itemService.hideItem(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping(value = "/{id}/complete")
+    public ResponseEntity<?> completeItem(@PathVariable Long id) {
+        itemService.completeItem(id);
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteItem(@PathVariable Long id) {
         itemService.deleteById(id);
