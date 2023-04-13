@@ -3,16 +3,16 @@ package com.itmo.ArtTrade.controller.payload;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
-import java.util.Date;
+import javax.validation.constraints.NotNull;
 
 @Data
 public class ItemUpdatePayload {
-    @NotEmpty
+    @NotNull
     private Long id;
     @NotEmpty
     private String title;
     @NotEmpty
     private String description;
-    @NotEmpty
+    @NotNull
     private Long categoryId;
 }

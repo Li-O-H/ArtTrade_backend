@@ -6,13 +6,13 @@ import javax.validation.constraints.*;
 
 @Data
 public class ItemFeedbackCreatePayload {
-    @NotEmpty
+    @NotNull
     @Max(value = 5)
     @Min(value = 1)
     private int rating;
-    @NotEmpty
+    @NotNull
     private Long userId;
-    @NotEmpty
+    @NotNull
     private Long itemId;
     @NotEmpty
     private String text;

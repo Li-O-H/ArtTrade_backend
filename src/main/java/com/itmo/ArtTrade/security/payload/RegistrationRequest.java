@@ -17,7 +17,7 @@ public class RegistrationRequest {
     @Size(min = 8, message = "Пароль не может быть короче 8 символов")
     private String password;
 
-    @NotEmpty(message = "Пароль должен быть задан")
+    @NotEmpty(message = "Повторный пароль должен быть задан")
     @Size(min = 8, message = "Пароль не может быть короче 8 символов")
     private String matchingPassword;
 

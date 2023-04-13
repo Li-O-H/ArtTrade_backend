@@ -1,5 +1,6 @@
 package com.itmo.ArtTrade.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -13,6 +14,7 @@ import javax.persistence.*;
 @Accessors(chain = true)
 public class OrderPhoto extends BaseEntity {
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;

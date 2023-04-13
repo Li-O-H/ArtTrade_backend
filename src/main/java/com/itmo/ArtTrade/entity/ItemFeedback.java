@@ -1,5 +1,6 @@
 package com.itmo.ArtTrade.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -15,6 +16,7 @@ public class ItemFeedback extends BaseEntity{
     @Column(name = "rating", nullable = false)
     private int rating;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "item_id", nullable = false)
     private Item item;

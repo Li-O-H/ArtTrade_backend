@@ -4,11 +4,12 @@ import lombok.Data;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Data
 public class OrderUpdatePayload {
-    @NotEmpty
+    @NotNull
     private Long id;
     @NotEmpty
     private String title;
@@ -16,6 +17,6 @@ public class OrderUpdatePayload {
     private String description;
     @Future
     private Date deadline;
-    @NotEmpty
+    @NotNull
     private Long categoryId;
 }

@@ -2,13 +2,12 @@ package com.itmo.ArtTrade.controller.payload;
 
 import lombok.Data;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Data
 public class ItemPhotoCreatePayload {
-    @NotEmpty
+    @NotNull
     private Long itemId;
     @NotEmpty
     private byte[] photo;
