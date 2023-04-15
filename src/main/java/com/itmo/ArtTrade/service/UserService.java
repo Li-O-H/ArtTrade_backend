@@ -1,10 +1,10 @@
 package com.itmo.ArtTrade.service;
 
-import com.itmo.ArtTrade.entity.Status;
 import com.itmo.ArtTrade.entity.User;
 import com.itmo.ArtTrade.exception.NoSuchDataException;
 import com.itmo.ArtTrade.exception.UserAlreadyExistsException;
 import com.itmo.ArtTrade.repository.UserRepository;
+import com.itmo.ArtTrade.security.service.AuthorizationService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +17,7 @@ public class UserService {
 
     private UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private AuthorizationService authorizationService;
 
     public User findById(Long id) {
         Optional<User> user = userRepository.findById(id);
@@ -49,6 +50,7 @@ public class UserService {
     }
 
     public void deleteById(Long id) {
+        authorizationService.invokerEqualsOwnerCheck(id);
         userRepository.deleteById(id);
     }
 }

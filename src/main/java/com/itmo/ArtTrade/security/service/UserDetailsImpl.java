@@ -10,12 +10,14 @@ import java.util.Collections;
 
 public class UserDetailsImpl implements UserDetails {
 
+    private Long id;
     private String email;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
     public static UserDetailsImpl build(User user) {
         UserDetailsImpl u = new UserDetailsImpl();
+        u.id = user.getId();
         u.email = user.getEmail();
         u.password = user.getPassword();
         u.authorities = Collections.singletonList(new SimpleGrantedAuthority("USER"));
@@ -35,6 +37,10 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public String getUsername() {
         return email;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     @Override

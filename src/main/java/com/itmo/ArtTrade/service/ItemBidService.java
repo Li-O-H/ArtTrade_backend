@@ -5,13 +5,16 @@ import com.itmo.ArtTrade.email.JavaMailSenderConfig;
 import com.itmo.ArtTrade.entity.Item;
 import com.itmo.ArtTrade.entity.ItemBid;
 import com.itmo.ArtTrade.entity.User;
+import com.itmo.ArtTrade.exception.NoSuchDataException;
 import com.itmo.ArtTrade.repository.ItemBidRepository;
+import com.itmo.ArtTrade.security.service.AuthorizationService;
 import lombok.AllArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -20,11 +23,21 @@ public class ItemBidService {
     private ItemBidRepository itemBidRepository;
     private UserService userService;
     private ItemService itemService;
+    private AuthorizationService authorizationService;
+
+    public ItemBid findById(Long id) {
+        Optional<ItemBid> itemBid = itemBidRepository.findById(id);
+        if (itemBid.isEmpty()) {
+            throw new NoSuchDataException();
+        }
+        return itemBid.get();
+    }
 
     private final JavaMailSender mailSender = new JavaMailSenderConfig().getJavaMailSender();
 
     public ItemBid save(ItemBidCreatePayload payload) {
         User user = userService.findById(payload.getUserId());
+        authorizationService.invokerEqualsOwnerCheck(user.getId());
         Item item = itemService.findById(payload.getItemId());
         ItemBid itemBid = new ItemBid()
                 .setItem(item)
@@ -40,6 +53,7 @@ public class ItemBidService {
     }
 
     public void deleteById(Long id) {
+        authorizationService.invokerEqualsOwnerCheck(findById(id).getUser().getId());
         itemBidRepository.deleteById(id);
     }
 }

@@ -5,6 +5,7 @@ import com.itmo.ArtTrade.controller.payload.OrderUpdatePayload;
 import com.itmo.ArtTrade.entity.*;
 import com.itmo.ArtTrade.exception.NoSuchDataException;
 import com.itmo.ArtTrade.repository.OrderRepository;
+import com.itmo.ArtTrade.security.service.AuthorizationService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ public class OrderService {
     private OrderRepository orderRepository;
     private CategoryService categoryService;
     private UserService userService;
+    private AuthorizationService authorizationService;
 
     public Order findById(Long id) {
         Optional<Order> order = orderRepository.findById(id);
@@ -58,6 +60,7 @@ public class OrderService {
     }
 
     public Order save(OrderCreatePayload payload) {
+        authorizationService.invokerEqualsOwnerCheck(payload.getUserId());
         User user = userService.findById(payload.getUserId());
         Category category = categoryService.findById(payload.getCategoryId());
         Order order = new Order()
@@ -71,6 +74,7 @@ public class OrderService {
     }
 
     public void addToFavorites(Long userId, Long orderId) {
+        authorizationService.invokerEqualsOwnerCheck(userId);
         User user = userService.findById(userId);
         Order order = findById(orderId);
         if (order.getFavoriteOf().contains(user)) {
@@ -89,6 +93,7 @@ public class OrderService {
 
     public Order update(OrderUpdatePayload payload) {
         Order order = findById(payload.getId());
+        authorizationService.invokerEqualsOwnerCheck(order.getUser().getId());
         Category category = categoryService.findById(payload.getCategoryId());
         if (!order.getStatus().equals(Status.COMPLETED)){
             order
@@ -103,6 +108,7 @@ public class OrderService {
 
     public void activateOrder(Long id) {
         Order order = findById(id);
+        authorizationService.invokerEqualsOwnerCheck(order.getUser().getId());
         if (!order.getStatus().equals(Status.COMPLETED)){
             order.setStatus(Status.ACTIVE);
             orderRepository.save(order);
@@ -111,6 +117,7 @@ public class OrderService {
 
     public void hideOrder(Long id) {
         Order order = findById(id);
+        authorizationService.invokerEqualsOwnerCheck(order.getUser().getId());
         if (!order.getStatus().equals(Status.COMPLETED)){
             order.setStatus(Status.HIDDEN);
             orderRepository.save(order);
@@ -120,18 +127,22 @@ public class OrderService {
     public void completeOrder(Long id, Long userId) {
         User user = userService.findById(userId);
         Order order = findById(id);
+        authorizationService.invokerEqualsOwnerCheck(order.getUser().getId());
         order.setStatus(Status.COMPLETED);
         order.setDoneBy(user);
         orderRepository.save(order);
     }
 
     public void deleteById(Long id) {
-        if (!findById(id).getStatus().equals(Status.COMPLETED)){
+        Order order = findById(id);
+        authorizationService.invokerEqualsOwnerCheck(order.getUser().getId());
+        if (!order.getStatus().equals(Status.COMPLETED)){
             orderRepository.deleteById(id);
         }
     }
 
     public void deleteFromFavorites(Long userId, Long orderId) {
+        authorizationService.invokerEqualsOwnerCheck(userId);
         User user = userService.findById(userId);
         Order order = findById(orderId);
         if (order.getFavoriteOf().contains(user)) {

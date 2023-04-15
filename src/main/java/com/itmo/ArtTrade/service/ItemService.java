@@ -5,6 +5,7 @@ import com.itmo.ArtTrade.controller.payload.ItemUpdatePayload;
 import com.itmo.ArtTrade.entity.*;
 import com.itmo.ArtTrade.exception.NoSuchDataException;
 import com.itmo.ArtTrade.repository.ItemRepository;
+import com.itmo.ArtTrade.security.service.AuthorizationService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ public class ItemService {
     private ItemRepository itemRepository;
     private CategoryService categoryService;
     private UserService userService;
+    private AuthorizationService authorizationService;
 
     public Item findById(Long id) {
         Optional<Item> item = itemRepository.findById(id);
@@ -58,6 +60,7 @@ public class ItemService {
     }
 
     public Item save(ItemCreatePayload payload) {
+        authorizationService.invokerEqualsOwnerCheck(payload.getUserId());
         User user = userService.findById(payload.getUserId());
         Category category = categoryService.findById(payload.getCategoryId());
         Item item = new Item()
@@ -70,6 +73,7 @@ public class ItemService {
     }
 
     public void addToFavorites(Long userId, Long itemId) {
+        authorizationService.invokerEqualsOwnerCheck(userId);
         User user = userService.findById(userId);
         Item item = findById(itemId);
         if (item.getFavoriteOf().contains(user)) {
@@ -88,6 +92,7 @@ public class ItemService {
 
     public Item update(ItemUpdatePayload payload) {
         Item item = findById(payload.getId());
+        authorizationService.invokerEqualsOwnerCheck(item.getUser().getId());
         Category category = categoryService.findById(payload.getCategoryId());
         if (!item.getStatus().equals(Status.COMPLETED)){
             item
@@ -101,6 +106,7 @@ public class ItemService {
 
     public void activateItem(Long id) {
         Item item = findById(id);
+        authorizationService.invokerEqualsOwnerCheck(item.getUser().getId());
         if (!item.getStatus().equals(Status.COMPLETED)){
             item.setStatus(Status.ACTIVE);
             itemRepository.save(item);
@@ -109,6 +115,7 @@ public class ItemService {
 
     public void hideItem(Long id) {
         Item item = findById(id);
+        authorizationService.invokerEqualsOwnerCheck(item.getUser().getId());
         if (!item.getStatus().equals(Status.COMPLETED)){
             item.setStatus(Status.HIDDEN);
             itemRepository.save(item);
@@ -117,17 +124,21 @@ public class ItemService {
 
     public void completeItem(Long id) {
         Item item = findById(id);
+        authorizationService.invokerEqualsOwnerCheck(item.getUser().getId());
         item.setStatus(Status.COMPLETED);
         itemRepository.save(item);
     }
 
     public void deleteById(Long id) {
-        if (!findById(id).getStatus().equals(Status.COMPLETED)) {
+        Item item = findById(id);
+        authorizationService.invokerEqualsOwnerCheck(item.getUser().getId());
+        if (!item.getStatus().equals(Status.COMPLETED)) {
             itemRepository.deleteById(id);
         }
     }
 
     public void deleteFromFavorites(Long userId, Long itemId) {
+        authorizationService.invokerEqualsOwnerCheck(userId);
         User user = userService.findById(userId);
         Item item = findById(itemId);
         if (item.getFavoriteOf().contains(user)) {

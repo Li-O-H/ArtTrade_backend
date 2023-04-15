@@ -2,16 +2,19 @@ package com.itmo.ArtTrade.service;
 
 import com.itmo.ArtTrade.controller.payload.OrderBidCreatePayload;
 import com.itmo.ArtTrade.email.JavaMailSenderConfig;
-import com.itmo.ArtTrade.entity.Order;
 import com.itmo.ArtTrade.entity.OrderBid;
+import com.itmo.ArtTrade.entity.Order;
 import com.itmo.ArtTrade.entity.User;
+import com.itmo.ArtTrade.exception.NoSuchDataException;
 import com.itmo.ArtTrade.repository.OrderBidRepository;
+import com.itmo.ArtTrade.security.service.AuthorizationService;
 import lombok.AllArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -20,11 +23,21 @@ public class OrderBidService {
     private OrderBidRepository orderBidRepository;
     private UserService userService;
     private OrderService orderService;
+    private AuthorizationService authorizationService;
+
+    public OrderBid findById(Long id) {
+        Optional<OrderBid> orderBid = orderBidRepository.findById(id);
+        if (orderBid.isEmpty()) {
+            throw new NoSuchDataException();
+        }
+        return orderBid.get();
+    }
 
     private final JavaMailSender mailSender = new JavaMailSenderConfig().getJavaMailSender();
 
     public OrderBid save(OrderBidCreatePayload payload) {
         User user = userService.findById(payload.getUserId());
+        authorizationService.invokerEqualsOwnerCheck(user.getId());
         Order order = orderService.findById(payload.getOrderId());
         OrderBid orderBid = new OrderBid()
                 .setOrder(order)
@@ -40,6 +53,7 @@ public class OrderBidService {
     }
 
     public void deleteById(Long id) {
+        authorizationService.invokerEqualsOwnerCheck(findById(id).getUser().getId());
         orderBidRepository.deleteById(id);
     }
 }
