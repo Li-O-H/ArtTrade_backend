@@ -50,7 +50,7 @@ public class UserService {
     }
 
     public void deleteById(Long id) {
-        authorizationService.invokerEqualsOwnerCheck(id);
+        authorizationService.invokerEqualsUserCheck(id);
         userRepository.deleteById(id);
     }
 }

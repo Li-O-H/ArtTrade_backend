@@ -31,8 +31,9 @@ public class ItemFeedbackService {
 
     public ItemFeedback save(ItemFeedbackCreatePayload payload) {
         User user = userService.findById(payload.getUserId());
-        authorizationService.invokerEqualsOwnerCheck(user.getId());
+        authorizationService.invokerEqualsUserCheck(user.getId());
         Item item = itemService.findById(payload.getItemId());
+        authorizationService.invokerNotEqualsUserCheck(item.getUser().getId());
         ItemFeedback itemFeedback = new ItemFeedback()
                 .setItem(item)
                 .setUser(user)
@@ -42,7 +43,7 @@ public class ItemFeedbackService {
     }
 
     public void deleteById(Long id) {
-        authorizationService.invokerEqualsOwnerCheck(findById(id).getUser().getId());
+        authorizationService.invokerEqualsUserCheck(findById(id).getUser().getId());
         itemFeedbackRepository.deleteById(id);
     }
 }

@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthorizationService {
 
-    @PreAuthorize("authentication.principal.id.equals(#creatorId)")
-    public void invokerEqualsOwnerCheck(Long creatorId) {}
+    @PreAuthorize("authentication.principal.id eq #userId")
+    public void invokerEqualsUserCheck(Long userId) {}
+
+    @PreAuthorize("authentication.principal.id ne #userId")
+    public void invokerNotEqualsUserCheck(Long userId) {}
 }

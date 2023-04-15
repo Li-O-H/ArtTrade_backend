@@ -37,8 +37,9 @@ public class ItemBidService {
 
     public ItemBid save(ItemBidCreatePayload payload) {
         User user = userService.findById(payload.getUserId());
-        authorizationService.invokerEqualsOwnerCheck(user.getId());
+        authorizationService.invokerEqualsUserCheck(user.getId());
         Item item = itemService.findById(payload.getItemId());
+        authorizationService.invokerNotEqualsUserCheck(item.getUser().getId());
         ItemBid itemBid = new ItemBid()
                 .setItem(item)
                 .setUser(user)
@@ -53,7 +54,7 @@ public class ItemBidService {
     }
 
     public void deleteById(Long id) {
-        authorizationService.invokerEqualsOwnerCheck(findById(id).getUser().getId());
+        authorizationService.invokerEqualsUserCheck(findById(id).getUser().getId());
         itemBidRepository.deleteById(id);
     }
 }

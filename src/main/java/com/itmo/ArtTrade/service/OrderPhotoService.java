@@ -29,7 +29,7 @@ public class OrderPhotoService {
 
     public OrderPhoto save(OrderPhotoCreatePayload payload) {
         Order order = orderService.findById(payload.getOrderId());
-        authorizationService.invokerEqualsOwnerCheck(order.getUser().getId());
+        authorizationService.invokerEqualsUserCheck(order.getUser().getId());
         OrderPhoto orderPhoto = new OrderPhoto()
                 .setPhoto(payload.getPhoto())
                 .setOrder(order);
@@ -37,7 +37,7 @@ public class OrderPhotoService {
     }
 
     public void deleteById(Long id) {
-        authorizationService.invokerEqualsOwnerCheck(findById(id).getOrder().getUser().getId());
+        authorizationService.invokerEqualsUserCheck(findById(id).getOrder().getUser().getId());
         orderPhotoRepository.deleteById(id);
     }
 }

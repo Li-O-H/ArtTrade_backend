@@ -14,17 +14,17 @@ import java.util.List;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler
-    public ResponseEntity<?> handleException(NoSuchDataException e) {
+    public ResponseEntity<?> handleNoSuchDataException(NoSuchDataException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler
-    public ResponseEntity<?> handleException(UserAlreadyExistsException e) {
+    public ResponseEntity<?> handleUserAlreadyExistsException(UserAlreadyExistsException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
-    public ResponseEntity<?> handleException(IllegalArgumentException e) {
+    public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
@@ -37,10 +37,5 @@ public class GlobalExceptionHandler {
             errors.add(error.getDefaultMessage());
         });
         return errors;
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<?> handlerException(Throwable e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

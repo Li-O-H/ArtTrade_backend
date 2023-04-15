@@ -29,7 +29,7 @@ public class ItemPhotoService {
 
     public ItemPhoto save(ItemPhotoCreatePayload payload) {
         Item item = itemService.findById(payload.getItemId());
-        authorizationService.invokerEqualsOwnerCheck(item.getUser().getId());
+        authorizationService.invokerEqualsUserCheck(item.getUser().getId());
         ItemPhoto itemPhoto = new ItemPhoto()
                 .setPhoto(payload.getPhoto())
                 .setItem(item);
@@ -37,7 +37,7 @@ public class ItemPhotoService {
     }
 
     public void deleteById(Long id) {
-        authorizationService.invokerEqualsOwnerCheck(findById(id).getItem().getUser().getId());
+        authorizationService.invokerEqualsUserCheck(findById(id).getItem().getUser().getId());
         itemPhotoRepository.deleteById(id);
     }
 }

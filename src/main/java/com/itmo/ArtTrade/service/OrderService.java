@@ -60,7 +60,7 @@ public class OrderService {
     }
 
     public Order save(OrderCreatePayload payload) {
-        authorizationService.invokerEqualsOwnerCheck(payload.getUserId());
+        authorizationService.invokerEqualsUserCheck(payload.getUserId());
         User user = userService.findById(payload.getUserId());
         Category category = categoryService.findById(payload.getCategoryId());
         Order order = new Order()
@@ -74,9 +74,10 @@ public class OrderService {
     }
 
     public void addToFavorites(Long userId, Long orderId) {
-        authorizationService.invokerEqualsOwnerCheck(userId);
+        authorizationService.invokerEqualsUserCheck(userId);
         User user = userService.findById(userId);
         Order order = findById(orderId);
+        authorizationService.invokerNotEqualsUserCheck(order.getUser().getId());
         if (order.getFavoriteOf().contains(user)) {
             return;
         }
@@ -93,7 +94,7 @@ public class OrderService {
 
     public Order update(OrderUpdatePayload payload) {
         Order order = findById(payload.getId());
-        authorizationService.invokerEqualsOwnerCheck(order.getUser().getId());
+        authorizationService.invokerEqualsUserCheck(order.getUser().getId());
         Category category = categoryService.findById(payload.getCategoryId());
         if (!order.getStatus().equals(Status.COMPLETED)){
             order
@@ -108,7 +109,7 @@ public class OrderService {
 
     public void activateOrder(Long id) {
         Order order = findById(id);
-        authorizationService.invokerEqualsOwnerCheck(order.getUser().getId());
+        authorizationService.invokerEqualsUserCheck(order.getUser().getId());
         if (!order.getStatus().equals(Status.COMPLETED)){
             order.setStatus(Status.ACTIVE);
             orderRepository.save(order);
@@ -117,7 +118,7 @@ public class OrderService {
 
     public void hideOrder(Long id) {
         Order order = findById(id);
-        authorizationService.invokerEqualsOwnerCheck(order.getUser().getId());
+        authorizationService.invokerEqualsUserCheck(order.getUser().getId());
         if (!order.getStatus().equals(Status.COMPLETED)){
             order.setStatus(Status.HIDDEN);
             orderRepository.save(order);
@@ -127,7 +128,7 @@ public class OrderService {
     public void completeOrder(Long id, Long userId) {
         User user = userService.findById(userId);
         Order order = findById(id);
-        authorizationService.invokerEqualsOwnerCheck(order.getUser().getId());
+        authorizationService.invokerEqualsUserCheck(order.getUser().getId());
         order.setStatus(Status.COMPLETED);
         order.setDoneBy(user);
         orderRepository.save(order);
@@ -135,14 +136,14 @@ public class OrderService {
 
     public void deleteById(Long id) {
         Order order = findById(id);
-        authorizationService.invokerEqualsOwnerCheck(order.getUser().getId());
+        authorizationService.invokerEqualsUserCheck(order.getUser().getId());
         if (!order.getStatus().equals(Status.COMPLETED)){
             orderRepository.deleteById(id);
         }
     }
 
     public void deleteFromFavorites(Long userId, Long orderId) {
-        authorizationService.invokerEqualsOwnerCheck(userId);
+        authorizationService.invokerEqualsUserCheck(userId);
         User user = userService.findById(userId);
         Order order = findById(orderId);
         if (order.getFavoriteOf().contains(user)) {

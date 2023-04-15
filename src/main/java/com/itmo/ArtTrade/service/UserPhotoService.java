@@ -29,7 +29,7 @@ public class UserPhotoService {
     }
 
     public UserPhoto save(UserPhotoCreatePayload payload) {
-        authorizationService.invokerEqualsOwnerCheck(payload.getUserId());
+        authorizationService.invokerEqualsUserCheck(payload.getUserId());
         User user = userService.findById(payload.getUserId());
         UserPhoto userPhoto = new UserPhoto()
                 .setPhoto(payload.getPhoto())
@@ -38,7 +38,7 @@ public class UserPhotoService {
     }
 
     public void deleteById(Long id) {
-        authorizationService.invokerEqualsOwnerCheck(findById(id).getUser().getId());
+        authorizationService.invokerEqualsUserCheck(findById(id).getUser().getId());
         userPhotoRepository.deleteById(id);
     }
 }

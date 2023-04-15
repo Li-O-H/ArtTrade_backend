@@ -37,8 +37,9 @@ public class OrderBidService {
 
     public OrderBid save(OrderBidCreatePayload payload) {
         User user = userService.findById(payload.getUserId());
-        authorizationService.invokerEqualsOwnerCheck(user.getId());
+        authorizationService.invokerEqualsUserCheck(user.getId());
         Order order = orderService.findById(payload.getOrderId());
+        authorizationService.invokerNotEqualsUserCheck(order.getUser().getId());
         OrderBid orderBid = new OrderBid()
                 .setOrder(order)
                 .setUser(user)
@@ -53,7 +54,7 @@ public class OrderBidService {
     }
 
     public void deleteById(Long id) {
-        authorizationService.invokerEqualsOwnerCheck(findById(id).getUser().getId());
+        authorizationService.invokerEqualsUserCheck(findById(id).getUser().getId());
         orderBidRepository.deleteById(id);
     }
 }

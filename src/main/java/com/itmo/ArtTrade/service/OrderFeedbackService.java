@@ -31,8 +31,9 @@ public class OrderFeedbackService {
 
     public OrderFeedback save(OrderFeedbackCreatePayload payload) {
         User user = userService.findById(payload.getUserId());
-        authorizationService.invokerEqualsOwnerCheck(user.getId());
+        authorizationService.invokerEqualsUserCheck(user.getId());
         Order order = orderService.findById(payload.getOrderId());
+        authorizationService.invokerNotEqualsUserCheck(order.getUser().getId());
         OrderFeedback orderFeedback = new OrderFeedback()
                 .setOrder(order)
                 .setUser(user)
@@ -42,7 +43,7 @@ public class OrderFeedbackService {
     }
 
     public void deleteById(Long id) {
-        authorizationService.invokerEqualsOwnerCheck(findById(id).getUser().getId());
+        authorizationService.invokerEqualsUserCheck(findById(id).getUser().getId());
         orderFeedbackRepository.deleteById(id);
     }
 }

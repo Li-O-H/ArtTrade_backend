@@ -60,7 +60,7 @@ public class ItemService {
     }
 
     public Item save(ItemCreatePayload payload) {
-        authorizationService.invokerEqualsOwnerCheck(payload.getUserId());
+        authorizationService.invokerEqualsUserCheck(payload.getUserId());
         User user = userService.findById(payload.getUserId());
         Category category = categoryService.findById(payload.getCategoryId());
         Item item = new Item()
@@ -73,9 +73,10 @@ public class ItemService {
     }
 
     public void addToFavorites(Long userId, Long itemId) {
-        authorizationService.invokerEqualsOwnerCheck(userId);
+        authorizationService.invokerEqualsUserCheck(userId);
         User user = userService.findById(userId);
         Item item = findById(itemId);
+        authorizationService.invokerNotEqualsUserCheck(item.getUser().getId());
         if (item.getFavoriteOf().contains(user)) {
             return;
         }
@@ -92,7 +93,7 @@ public class ItemService {
 
     public Item update(ItemUpdatePayload payload) {
         Item item = findById(payload.getId());
-        authorizationService.invokerEqualsOwnerCheck(item.getUser().getId());
+        authorizationService.invokerEqualsUserCheck(item.getUser().getId());
         Category category = categoryService.findById(payload.getCategoryId());
         if (!item.getStatus().equals(Status.COMPLETED)){
             item
@@ -106,7 +107,7 @@ public class ItemService {
 
     public void activateItem(Long id) {
         Item item = findById(id);
-        authorizationService.invokerEqualsOwnerCheck(item.getUser().getId());
+        authorizationService.invokerEqualsUserCheck(item.getUser().getId());
         if (!item.getStatus().equals(Status.COMPLETED)){
             item.setStatus(Status.ACTIVE);
             itemRepository.save(item);
@@ -115,7 +116,7 @@ public class ItemService {
 
     public void hideItem(Long id) {
         Item item = findById(id);
-        authorizationService.invokerEqualsOwnerCheck(item.getUser().getId());
+        authorizationService.invokerEqualsUserCheck(item.getUser().getId());
         if (!item.getStatus().equals(Status.COMPLETED)){
             item.setStatus(Status.HIDDEN);
             itemRepository.save(item);
@@ -124,21 +125,21 @@ public class ItemService {
 
     public void completeItem(Long id) {
         Item item = findById(id);
-        authorizationService.invokerEqualsOwnerCheck(item.getUser().getId());
+        authorizationService.invokerEqualsUserCheck(item.getUser().getId());
         item.setStatus(Status.COMPLETED);
         itemRepository.save(item);
     }
 
     public void deleteById(Long id) {
         Item item = findById(id);
-        authorizationService.invokerEqualsOwnerCheck(item.getUser().getId());
+        authorizationService.invokerEqualsUserCheck(item.getUser().getId());
         if (!item.getStatus().equals(Status.COMPLETED)) {
             itemRepository.deleteById(id);
         }
     }
 
     public void deleteFromFavorites(Long userId, Long itemId) {
-        authorizationService.invokerEqualsOwnerCheck(userId);
+        authorizationService.invokerEqualsUserCheck(userId);
         User user = userService.findById(userId);
         Item item = findById(itemId);
         if (item.getFavoriteOf().contains(user)) {
