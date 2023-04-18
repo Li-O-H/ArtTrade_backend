@@ -2,12 +2,14 @@ package com.itmo.ArtTrade.security.payload;
 
 import com.itmo.ArtTrade.validation.PasswordMatching;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 @Data
 @PasswordMatching
+@NoArgsConstructor
 public class RegistrationRequest {
 
     @NotEmpty(message = "Email должен быть задан")

@@ -32,7 +32,8 @@ public class AuthController {
                 .setEmail(request.getEmail())
                 .setAboutCreator(request.getAboutCreator());
         userService.save(user);
-        return authenticateUser(new AuthRequest(request.getEmail(), request.getPassword()));    }
+        return authenticateUser(new AuthRequest().setEmail(request.getEmail()).setPassword(request.getPassword()));
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody @Valid AuthRequest request) {

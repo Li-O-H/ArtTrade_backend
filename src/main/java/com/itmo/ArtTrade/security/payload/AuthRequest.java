@@ -1,13 +1,15 @@
 package com.itmo.ArtTrade.security.payload;
 
 import lombok.Data;
-import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 @Data
-@AllArgsConstructor
+@NoArgsConstructor
+@Accessors(chain = true)
 public class AuthRequest {
 
     @NotEmpty(message = "Email должен быть задан")
