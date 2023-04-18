@@ -1,7 +1,6 @@
 package com.itmo.ArtTrade.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -10,9 +9,6 @@ import javax.persistence.*;
 import java.util.Collections;
 import java.util.List;
 
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
 @EqualsAndHashCode(callSuper = false)
 @Data
 @Entity
@@ -35,30 +31,39 @@ public class User extends BaseEntity{
     @Column(name = "about_creator", length = 1000)
     private String aboutCreator;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<UserPhoto> photos;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Item> items;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "doneBy")
     private List<Order> doneOrders;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<ItemBid> itemBids;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<OrderBid> orderBids;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<ItemFeedback> itemFeedbacks;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<OrderFeedback> orderFeedbacks;
 
+    @JsonIgnore
     @ManyToMany(targetEntity = Item.class, cascade = CascadeType.ALL)
     @JoinTable(
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -66,6 +71,7 @@ public class User extends BaseEntity{
             name = "favorite_items")
     private List<Item> favoriteItems = Collections.emptyList();
 
+    @JsonIgnore
     @ManyToMany(targetEntity = Order.class, cascade = CascadeType.ALL)
     @JoinTable(
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
