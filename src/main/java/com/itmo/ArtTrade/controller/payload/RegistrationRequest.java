@@ -1,4 +1,4 @@
-package com.itmo.ArtTrade.security.payload;
+package com.itmo.ArtTrade.controller.payload;
 
 import com.itmo.ArtTrade.validation.PasswordMatching;
 import lombok.Data;

@@ -1,6 +1,6 @@
 package com.itmo.ArtTrade.validation;
 
-import com.itmo.ArtTrade.security.payload.RegistrationRequest;
+import com.itmo.ArtTrade.controller.payload.RegistrationRequest;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

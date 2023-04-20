@@ -3,14 +3,13 @@ package com.itmo.ArtTrade.controller;
 import com.itmo.ArtTrade.entity.User;
 import com.itmo.ArtTrade.security.jwt.JwtProvider;
 import com.itmo.ArtTrade.service.UserService;
-import com.itmo.ArtTrade.security.payload.AuthRequest;
-import com.itmo.ArtTrade.security.payload.RegistrationRequest;
+import com.itmo.ArtTrade.controller.payload.AuthRequest;
+import com.itmo.ArtTrade.controller.payload.RegistrationRequest;
+import io.jsonwebtoken.MalformedJwtException;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -43,5 +42,19 @@ public class AuthController {
             return ResponseEntity.ok(token);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getUserByToken(@RequestParam(required = false) String token) {
+        if (token == null) {
+            return ResponseEntity.ok(null);
+        }
+        String email;
+        try {
+            email = jwtProvider.getEmailFromToken(token);
+        } catch (MalformedJwtException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        return ResponseEntity.ok(userService.getByEmail(email));
     }
 }
