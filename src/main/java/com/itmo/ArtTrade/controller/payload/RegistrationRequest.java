@@ -1,6 +1,6 @@
 package com.itmo.ArtTrade.controller.payload;
 
-import com.itmo.ArtTrade.validation.PasswordMatching;
+import com.itmo.ArtTrade.controller.validation.PasswordMatching;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

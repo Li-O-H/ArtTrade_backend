@@ -1,4 +1,4 @@
-package com.itmo.ArtTrade.validation;
+package com.itmo.ArtTrade.controller.validation;
 
 import com.itmo.ArtTrade.controller.payload.RegistrationRequest;
 

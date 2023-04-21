@@ -1,4 +1,4 @@
-package com.itmo.ArtTrade.validation;
+package com.itmo.ArtTrade.controller.validation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -11,7 +11,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({TYPE,ANNOTATION_TYPE})
 @Retention(RUNTIME)
-@Constraint(validatedBy = com.itmo.ArtTrade.validation.PasswordMatchingValidator.class)
+@Constraint(validatedBy = com.itmo.ArtTrade.controller.validation.PasswordMatchingValidator.class)
 public @interface PasswordMatching {
     String message() default "Пароли не совпадают";
     Class<?>[] groups() default {};
