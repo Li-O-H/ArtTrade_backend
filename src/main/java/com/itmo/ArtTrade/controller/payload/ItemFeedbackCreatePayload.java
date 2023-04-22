@@ -14,6 +14,7 @@ public class ItemFeedbackCreatePayload {
     private Long userId;
     @NotNull
     private Long itemId;
+    @Size(max = 1000)
     @NotEmpty
     private String text;
 }

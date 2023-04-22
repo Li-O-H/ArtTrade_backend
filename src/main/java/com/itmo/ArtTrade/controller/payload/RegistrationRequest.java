@@ -29,5 +29,6 @@ public class RegistrationRequest {
     @NotEmpty(message = "Город должен быть задан")
     private String city;
 
+    @Size(max = 1000)
     private String aboutCreator;
 }
