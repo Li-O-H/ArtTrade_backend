@@ -1,6 +1,5 @@
 package com.itmo.ArtTrade.controller.payload;
 
-import com.itmo.ArtTrade.controller.validation.PasswordMatching;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,7 +7,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 @Data
-@PasswordMatching
 @NoArgsConstructor
 public class RegistrationRequest {
 
@@ -18,10 +16,6 @@ public class RegistrationRequest {
     @NotEmpty(message = "Пароль должен быть задан")
     @Size(min = 8, message = "Пароль не может быть короче 8 символов")
     private String password;
-
-    @NotEmpty(message = "Повторный пароль должен быть задан")
-    @Size(min = 8, message = "Пароль не может быть короче 8 символов")
-    private String matchingPassword;
 
     @NotEmpty(message = "Имя должно быть задано")
     private String name;
