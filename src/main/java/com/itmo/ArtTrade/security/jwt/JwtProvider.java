@@ -12,12 +12,10 @@ import java.util.Date;
 @Log
 public class JwtProvider {
 
-    private final String jwtSecret = "secret123";
-
-    private final int jwtExpirationHs = 24 * 365;
+    private final String jwtSecret = "secret_wprmfoprmopwmvwopvmwvpeve";
 
     public String generateToken(String email) {
-        Date date = Date.from(LocalDateTime.now().plusHours(jwtExpirationHs).atZone(ZoneId.systemDefault()).toInstant());
+        Date date = Date.from(LocalDateTime.now().plusHours(24 * 365).atZone(ZoneId.systemDefault()).toInstant());
         return Jwts.builder()
                 .setSubject(email)
                 .setExpiration(date)
