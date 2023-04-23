@@ -31,11 +31,11 @@ public class AuthController {
                 .setEmail(request.getEmail())
                 .setAboutCreator(request.getAboutCreator());
         userService.save(user);
-        return authenticateUser(new AuthRequest().setEmail(request.getEmail()).setPassword(request.getPassword()));
+        return loginUser(new AuthRequest().setEmail(request.getEmail()).setPassword(request.getPassword()));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@RequestBody @Valid AuthRequest request) {
+    public ResponseEntity<?> loginUser(@RequestBody @Valid AuthRequest request) {
         User user = userService.getByEmailAndPassword(request.getEmail(), request.getPassword());
         if (user != null) {
             String token = jwtProvider.generateToken(user.getEmail());
