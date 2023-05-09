@@ -22,10 +22,14 @@ public class ItemController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getActiveItems(@RequestParam(required = false) Float min,
-                                            @RequestParam(required = false) Float max,
-                                            @RequestParam(required = false) Long categoryId) {
-        return ResponseEntity.ok(itemService.findActiveItems(min, max, categoryId));
+    public ResponseEntity<?> getItems(@RequestParam(required = false) Float minPrice,
+                                            @RequestParam(required = false) Float maxPrice,
+                                            @RequestParam(required = false) Long categoryId,
+                                            @RequestParam(required = false) Long userId) {
+        if (userId != null) {
+            return ResponseEntity.ok(itemService.findUserItems(userId));
+        }
+        return ResponseEntity.ok(itemService.findActiveItems(minPrice, maxPrice, categoryId));
     }
 
     @PostMapping

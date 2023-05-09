@@ -35,7 +35,6 @@ public class ItemBidService {
         User user = userService.findById(payload.getUserId());
         authorizationService.invokerEqualsUserCheck(user.getId());
         Item item = itemService.findById(payload.getItemId());
-        authorizationService.invokerNotEqualsUserCheck(item.getUser().getId());
         ItemBid itemBid = new ItemBid()
                 .setItem(item)
                 .setUser(user)

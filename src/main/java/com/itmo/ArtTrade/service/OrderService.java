@@ -59,6 +59,16 @@ public class OrderService {
         return orders;
     }
 
+    public List<Order> findUserOrders(Long userId) {
+        User user = userService.findById(userId);
+        try {
+            authorizationService.invokerEqualsUserCheck(userId);
+        } catch (Exception e) {
+            return orderRepository.findAllByUserAndStatusNot(user, Status.HIDDEN);
+        }
+        return orderRepository.findAllByUser(user);
+    }
+
     public Order save(OrderCreatePayload payload) {
         authorizationService.invokerEqualsUserCheck(payload.getUserId());
         User user = userService.findById(payload.getUserId());
@@ -146,7 +156,7 @@ public class OrderService {
         authorizationService.invokerEqualsUserCheck(userId);
         User user = userService.findById(userId);
         Order order = findById(orderId);
-        if (order.getFavoriteOf().contains(user)) {
+        if (!order.getFavoriteOf().contains(user)) {
             return;
         }
         order.getFavoriteOf()

@@ -59,6 +59,16 @@ public class ItemService {
         return items;
     }
 
+    public List<Item> findUserItems(Long userId) {
+        User user = userService.findById(userId);
+        try {
+            authorizationService.invokerEqualsUserCheck(userId);
+        } catch (Exception e) {
+            return itemRepository.findAllByUserAndStatusNot(user, Status.HIDDEN);
+        }
+        return itemRepository.findAllByUser(user);
+    }
+
     public Item save(ItemCreatePayload payload) {
         authorizationService.invokerEqualsUserCheck(payload.getUserId());
         User user = userService.findById(payload.getUserId());
@@ -142,7 +152,7 @@ public class ItemService {
         authorizationService.invokerEqualsUserCheck(userId);
         User user = userService.findById(userId);
         Item item = findById(itemId);
-        if (item.getFavoriteOf().contains(user)) {
+        if (!item.getFavoriteOf().contains(user)) {
             return;
         }
         item.getFavoriteOf()

@@ -1,6 +1,5 @@
 package com.itmo.ArtTrade.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,16 +28,15 @@ public class Item extends BaseEntity{
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "item")
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<ItemPhoto> photos;
 
-    @OneToMany(mappedBy = "item")
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<ItemFeedback> feedbacks;
 
-    @OneToMany(mappedBy = "item")
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<ItemBid> bids;
 
-    @JsonIgnore
     @ManyToMany(mappedBy = "favoriteItems")
     private List<User> favoriteOf = Collections.emptyList();
 

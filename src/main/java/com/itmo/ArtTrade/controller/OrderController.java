@@ -22,10 +22,14 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getActiveOrders(@RequestParam(required = false) Float min,
-                                            @RequestParam(required = false) Float max,
-                                            @RequestParam(required = false) Long categoryId) {
-        return ResponseEntity.ok(orderService.findActiveOrders(min, max, categoryId));
+    public ResponseEntity<?> getOrders(@RequestParam(required = false) Float minPrice,
+                                      @RequestParam(required = false) Float maxPrice,
+                                      @RequestParam(required = false) Long categoryId,
+                                      @RequestParam(required = false) Long userId) {
+        if (userId != null) {
+            return ResponseEntity.ok(orderService.findUserOrders(userId));
+        }
+        return ResponseEntity.ok(orderService.findActiveOrders(minPrice, maxPrice, categoryId));
     }
 
     @PostMapping

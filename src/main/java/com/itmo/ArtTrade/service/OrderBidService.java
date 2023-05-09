@@ -35,10 +35,8 @@ public class OrderBidService {
         User user = userService.findById(payload.getUserId());
         authorizationService.invokerEqualsUserCheck(user.getId());
         Order order = orderService.findById(payload.getOrderId());
-        authorizationService.invokerNotEqualsUserCheck(order.getUser().getId());
         OrderBid orderBid = new OrderBid()
                 .setOrder(order)
-                .setUser(user)
                 .setPrice(payload.getPrice());
         mailService.sendBidCreateNotification(order.getUser().getEmail(), user, payload.getPrice(), order.getTitle());
         return orderBidRepository.save(orderBid);
