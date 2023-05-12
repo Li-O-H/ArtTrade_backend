@@ -69,6 +69,12 @@ public class ItemService {
         return itemRepository.findAllByUser(user);
     }
 
+    public List<Item> findFavoriteItemsByUser(Long userId) {
+        User user = userService.findById(userId);
+        authorizationService.invokerEqualsUserCheck(userId);
+        return itemRepository.findAllByFavoriteOfContains(user);
+    }
+
     public Item save(ItemCreatePayload payload) {
         authorizationService.invokerEqualsUserCheck(payload.getUserId());
         User user = userService.findById(payload.getUserId());

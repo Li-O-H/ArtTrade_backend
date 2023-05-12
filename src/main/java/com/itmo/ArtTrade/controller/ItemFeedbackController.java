@@ -15,6 +15,11 @@ public class ItemFeedbackController {
 
     private ItemFeedbackService itemFeedbackService;
 
+    @GetMapping
+    public ResponseEntity<?> getItemFeedbacksByUser(@RequestParam(required = false) Long userId) {
+        return ResponseEntity.ok(itemFeedbackService.findUserItemFeedbacks(userId));
+    }
+
     @PostMapping
     public ResponseEntity<?> addItemFeedback(@RequestBody @Valid ItemFeedbackCreatePayload itemFeedback) {
         return ResponseEntity.ok(itemFeedbackService.save(itemFeedback));

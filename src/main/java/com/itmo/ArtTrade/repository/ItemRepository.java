@@ -19,4 +19,6 @@ public interface ItemRepository extends CrudRepository<Item, Long> {
     List<Item> findAllByUserAndStatusNot(User user, Status status);
 
     List<Item> findAllByUser(User user);
+
+    List<Item> findAllByFavoriteOfContains(User user);
 }

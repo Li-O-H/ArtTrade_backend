@@ -1,6 +1,5 @@
 package com.itmo.ArtTrade.service;
 
-
 import com.itmo.ArtTrade.controller.payload.UserPhotoCreatePayload;
 import com.itmo.ArtTrade.entity.User;
 import com.itmo.ArtTrade.entity.UserPhoto;
@@ -10,6 +9,7 @@ import com.itmo.ArtTrade.security.service.AuthorizationService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,6 +26,11 @@ public class UserPhotoService {
             throw new NoSuchDataException();
         }
         return userPhoto.get();
+    }
+
+    public List<UserPhoto> findUserPhotosByUser(Long userId) {
+        User user = userService.findById(userId);
+        return userPhotoRepository.findAllByUser(user);
     }
 
     public UserPhoto save(UserPhotoCreatePayload payload) {

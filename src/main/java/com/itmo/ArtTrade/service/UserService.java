@@ -1,5 +1,6 @@
 package com.itmo.ArtTrade.service;
 
+import com.itmo.ArtTrade.controller.payload.UserUpdatePayload;
 import com.itmo.ArtTrade.entity.User;
 import com.itmo.ArtTrade.exception.NoSuchDataException;
 import com.itmo.ArtTrade.exception.UserAlreadyExistsException;
@@ -47,6 +48,16 @@ public class UserService {
 
     public User getByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public User update(UserUpdatePayload payload) {
+        User user = findById(payload.getId());
+        authorizationService.invokerEqualsUserCheck(user.getId());
+        user
+                .setName(payload.getName())
+                .setCity(payload.getCity())
+                .setAboutCreator(payload.getAboutCreator());
+            return userRepository.save(user);
     }
 
     public void deleteById(Long id) {

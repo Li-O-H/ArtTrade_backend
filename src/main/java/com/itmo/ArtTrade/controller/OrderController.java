@@ -23,11 +23,15 @@ public class OrderController {
 
     @GetMapping
     public ResponseEntity<?> getOrders(@RequestParam(required = false) Float minPrice,
-                                      @RequestParam(required = false) Float maxPrice,
-                                      @RequestParam(required = false) Long categoryId,
-                                      @RequestParam(required = false) Long userId) {
+                                       @RequestParam(required = false) Float maxPrice,
+                                       @RequestParam(required = false) Long categoryId,
+                                       @RequestParam(required = false) Long userId,
+                                       @RequestParam(required = false) Long favoriteByUserId) {
         if (userId != null) {
             return ResponseEntity.ok(orderService.findUserOrders(userId));
+        }
+        if (favoriteByUserId != null) {
+            return ResponseEntity.ok(orderService.findFavoriteOrdersByUser(favoriteByUserId));
         }
         return ResponseEntity.ok(orderService.findActiveOrders(minPrice, maxPrice, categoryId));
     }
@@ -39,7 +43,7 @@ public class OrderController {
 
     @PostMapping(params = {"userId", "orderId"})
     public ResponseEntity<?> addToFavorites(@RequestParam Long userId,
-                                     @RequestParam Long orderId) {
+                                            @RequestParam Long orderId) {
         orderService.addToFavorites(userId, orderId);
         return ResponseEntity.ok().build();
     }
@@ -61,9 +65,9 @@ public class OrderController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping(value = "/{id}/complete", params = {"userId"})
-    public ResponseEntity<?> completeOrder(@PathVariable Long id, @RequestParam Long userId) {
-        orderService.completeOrder(id, userId);
+    @PutMapping(value = "/{id}/complete", params = {"email"})
+    public ResponseEntity<?> completeOrder(@PathVariable Long id, @RequestParam String email) {
+        orderService.completeOrder(id, email);
         return ResponseEntity.ok().build();
     }
 
@@ -75,7 +79,7 @@ public class OrderController {
 
     @DeleteMapping(params = {"userId", "orderId"})
     public ResponseEntity<?> deleteFromFavorites(@RequestParam Long userId,
-                                        @RequestParam Long orderId) {
+                                                 @RequestParam Long orderId) {
         orderService.deleteFromFavorites(userId, orderId);
         return ResponseEntity.ok().build();
     }

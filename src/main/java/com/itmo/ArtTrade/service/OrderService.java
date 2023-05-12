@@ -69,6 +69,12 @@ public class OrderService {
         return orderRepository.findAllByUser(user);
     }
 
+    public List<Order> findFavoriteOrdersByUser(Long userId) {
+        User user = userService.findById(userId);
+        authorizationService.invokerEqualsUserCheck(userId);
+        return orderRepository.findAllByFavoriteOfContains(user);
+    }
+
     public Order save(OrderCreatePayload payload) {
         authorizationService.invokerEqualsUserCheck(payload.getUserId());
         User user = userService.findById(payload.getUserId());
@@ -135,8 +141,11 @@ public class OrderService {
         }
     }
 
-    public void completeOrder(Long id, Long userId) {
-        User user = userService.findById(userId);
+    public void completeOrder(Long id, String email) {
+        User user = userService.getByEmail(email);
+        if (user == null) {
+            throw new NoSuchDataException();
+        }
         Order order = findById(id);
         authorizationService.invokerEqualsUserCheck(order.getUser().getId());
         order.setStatus(Status.COMPLETED);

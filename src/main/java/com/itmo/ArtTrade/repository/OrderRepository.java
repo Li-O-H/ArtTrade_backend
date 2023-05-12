@@ -19,4 +19,6 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
     List<Order> findAllByUserAndStatusNot(User user, Status status);
 
     List<Order> findAllByUser(User user);
+
+    List<Order> findAllByFavoriteOfContains(User user);
 }

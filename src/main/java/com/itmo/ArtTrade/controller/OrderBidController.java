@@ -15,6 +15,11 @@ public class OrderBidController {
 
     private OrderBidService orderBidService;
 
+    @GetMapping
+    public ResponseEntity<?> getOrderBidsByUser(@RequestParam Long userId) {
+        return ResponseEntity.ok(orderBidService.findUserOrderBids(userId));
+    }
+
     @PostMapping
     public ResponseEntity<?> addOrderBid(@RequestBody @Valid OrderBidCreatePayload orderBid) {
         return ResponseEntity.ok(orderBidService.save(orderBid));

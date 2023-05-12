@@ -15,6 +15,11 @@ public class OrderFeedbackController {
 
     private OrderFeedbackService orderFeedbackService;
 
+    @GetMapping
+    public ResponseEntity<?> getOrderFeedbacksByUser(@RequestParam(required = false) Long userId) {
+        return ResponseEntity.ok(orderFeedbackService.findUserOrderFeedbacks(userId));
+    }
+
     @PostMapping
     public ResponseEntity<?> addOrderFeedback(@RequestBody @Valid OrderFeedbackCreatePayload orderFeedback) {
         return ResponseEntity.ok(orderFeedbackService.save(orderFeedback));

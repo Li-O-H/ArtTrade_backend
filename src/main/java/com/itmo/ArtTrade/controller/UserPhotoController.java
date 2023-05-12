@@ -15,6 +15,11 @@ public class UserPhotoController {
 
     private UserPhotoService userPhotoService;
 
+    @GetMapping
+    public ResponseEntity<?> getUserPhotosByUser(@RequestParam Long userId) {
+        return ResponseEntity.ok(userPhotoService.findUserPhotosByUser(userId));
+    }
+
     @PostMapping
     public ResponseEntity<?> addUserPhoto(@RequestBody @Valid UserPhotoCreatePayload userPhoto) {
         return ResponseEntity.ok(userPhotoService.save(userPhoto));

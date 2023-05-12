@@ -1,7 +1,6 @@
 package com.itmo.ArtTrade.controller;
 
 import com.itmo.ArtTrade.controller.payload.ItemBidCreatePayload;
-import com.itmo.ArtTrade.entity.ItemBid;
 import com.itmo.ArtTrade.service.ItemBidService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +14,11 @@ import javax.validation.Valid;
 public class ItemBidController {
 
     private ItemBidService itemBidService;
+
+    @GetMapping
+    public ResponseEntity<?> getItemBidsByUser(@RequestParam Long userId) {
+        return ResponseEntity.ok(itemBidService.findUserItemBids(userId));
+    }
 
     @PostMapping
     public ResponseEntity<?> addItemBid(@RequestBody @Valid ItemBidCreatePayload itemBid) {

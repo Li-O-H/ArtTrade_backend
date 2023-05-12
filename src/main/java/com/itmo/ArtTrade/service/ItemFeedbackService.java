@@ -10,6 +10,7 @@ import com.itmo.ArtTrade.security.service.AuthorizationService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,6 +28,11 @@ public class ItemFeedbackService {
             throw new NoSuchDataException();
         }
         return itemFeedback.get();
+    }
+
+    public List<ItemFeedback> findUserItemFeedbacks(Long userId) {
+        User user = userService.findById(userId);
+        return itemFeedbackRepository.findAllByUser(user);
     }
 
     public ItemFeedback save(ItemFeedbackCreatePayload payload) {

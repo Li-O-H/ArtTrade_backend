@@ -11,6 +11,7 @@ import com.itmo.ArtTrade.security.service.AuthorizationService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,6 +30,11 @@ public class OrderBidService {
             throw new NoSuchDataException();
         }
         return orderBid.get();
+    }
+
+    public List<OrderBid> findUserOrderBids(Long userId) {
+        User user = userService.findById(userId);
+        return orderBidRepository.findAllByUser(user);
     }
 
     public OrderBid save(OrderBidCreatePayload payload) {

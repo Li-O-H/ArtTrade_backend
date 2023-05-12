@@ -23,11 +23,15 @@ public class ItemController {
 
     @GetMapping
     public ResponseEntity<?> getItems(@RequestParam(required = false) Float minPrice,
-                                            @RequestParam(required = false) Float maxPrice,
-                                            @RequestParam(required = false) Long categoryId,
-                                            @RequestParam(required = false) Long userId) {
+                                      @RequestParam(required = false) Float maxPrice,
+                                      @RequestParam(required = false) Long categoryId,
+                                      @RequestParam(required = false) Long userId,
+                                      @RequestParam(required = false) Long favoriteByUserId) {
         if (userId != null) {
             return ResponseEntity.ok(itemService.findUserItems(userId));
+        }
+        if (favoriteByUserId != null) {
+            return ResponseEntity.ok(itemService.findFavoriteItemsByUser(favoriteByUserId));
         }
         return ResponseEntity.ok(itemService.findActiveItems(minPrice, maxPrice, categoryId));
     }
@@ -39,7 +43,7 @@ public class ItemController {
 
     @PostMapping(params = {"userId", "itemId"})
     public ResponseEntity<?> addToFavorites(@RequestParam Long userId,
-                                     @RequestParam Long itemId) {
+                                            @RequestParam Long itemId) {
         itemService.addToFavorites(userId, itemId);
         return ResponseEntity.ok().build();
     }
@@ -76,7 +80,7 @@ public class ItemController {
 
     @DeleteMapping(params = {"userId", "itemId"})
     public ResponseEntity<?> deleteFromFavorites(@RequestParam Long userId,
-                                     @RequestParam Long itemId) {
+                                                 @RequestParam Long itemId) {
         itemService.deleteFromFavorites(userId, itemId);
         return ResponseEntity.ok().build();
     }
