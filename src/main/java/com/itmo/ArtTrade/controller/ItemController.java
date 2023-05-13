@@ -50,7 +50,7 @@ public class ItemController {
     }
 
     @Operation(summary = "Добавить предмет в избранное")
-    @PostMapping(params = {"userId", "itemId"})
+    @PostMapping(value = "/favorite", params = {"userId", "itemId"})
     public ResponseEntity<?> addToFavorites(@RequestParam Long userId,
                                             @RequestParam Long itemId) {
         itemService.addToFavorites(userId, itemId);
@@ -93,7 +93,7 @@ public class ItemController {
     }
 
     @Operation(summary = "Удалить предмет из избранного")
-    @DeleteMapping(params = {"userId", "itemId"})
+    @DeleteMapping(value = "/favorite", params = {"userId", "itemId"})
     public ResponseEntity<?> deleteFromFavorites(@RequestParam Long userId,
                                                  @RequestParam Long itemId) {
         itemService.deleteFromFavorites(userId, itemId);

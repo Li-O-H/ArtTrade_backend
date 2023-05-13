@@ -54,7 +54,7 @@ public class OrderController {
     }
 
     @Operation(summary = "Добавить заказ в избранное")
-    @PostMapping(params = {"userId", "orderId"})
+    @PostMapping(value = "favorite", params = {"userId", "orderId"})
     public ResponseEntity<?> addToFavorites(@RequestParam Long userId,
                                             @RequestParam Long orderId) {
         orderService.addToFavorites(userId, orderId);
@@ -96,7 +96,7 @@ public class OrderController {
     }
 
     @Operation(summary = "Удалить заказ из избранного")
-    @DeleteMapping(params = {"userId", "orderId"})
+    @DeleteMapping(value = "favorite", params = {"userId", "orderId"})
     public ResponseEntity<?> deleteFromFavorites(@RequestParam Long userId,
                                                  @RequestParam Long orderId) {
         orderService.deleteFromFavorites(userId, orderId);
