@@ -19,6 +19,7 @@ public class User extends BaseEntity{
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
+    @JsonIgnore
     @Column(name = "password", nullable = false)
     private String password;
 
@@ -43,7 +44,6 @@ public class User extends BaseEntity{
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> orders;
 
-    //todo что при удалении делать
     @JsonIgnore
     @OneToMany(mappedBy = "doneBy")
     private List<Order> doneOrders;

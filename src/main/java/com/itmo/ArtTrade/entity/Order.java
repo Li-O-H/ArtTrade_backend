@@ -34,7 +34,12 @@ public class Order extends BaseEntity {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "done_by")
+    @JoinColumn(name = "done_by", foreignKey = @javax.persistence
+            .ForeignKey(foreignKeyDefinition = """
+                FOREIGN KEY (done_by)
+                REFERENCES public."user" (id) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE SET NULL;"""))
     private User doneBy;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)

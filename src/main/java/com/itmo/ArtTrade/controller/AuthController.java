@@ -6,6 +6,8 @@ import com.itmo.ArtTrade.service.UserService;
 import com.itmo.ArtTrade.controller.payload.AuthRequest;
 import com.itmo.ArtTrade.controller.payload.RegistrationRequest;
 import io.jsonwebtoken.MalformedJwtException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +18,13 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/auth")
 @AllArgsConstructor
+@Tag(name="Authentication controller", description="Выполняет регистрацию и аутентификацию")
 public class AuthController {
 
     private final UserService userService;
     private final JwtProvider jwtProvider;
 
-
+    @Operation(summary = "Регистрация пользователя")
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody @Valid RegistrationRequest request) {
         User user = new User()
@@ -34,6 +37,7 @@ public class AuthController {
         return loginUser(new AuthRequest().setEmail(request.getEmail()).setPassword(request.getPassword()));
     }
 
+    @Operation(summary = "Вход в аккаунт")
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody @Valid AuthRequest request) {
         User user = userService.getByEmailAndPassword(request.getEmail(), request.getPassword());
@@ -44,6 +48,7 @@ public class AuthController {
         return ResponseEntity.notFound().build();
     }
 
+    @Operation(summary = "Получение пользователя по JWT токену")
     @GetMapping
     public ResponseEntity<?> getUserByToken(@RequestParam(required = false) String token) {
         if (token == null) {
