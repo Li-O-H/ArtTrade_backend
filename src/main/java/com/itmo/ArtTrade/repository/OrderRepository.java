@@ -21,4 +21,6 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
     List<Order> findAllByUser(User user);
 
     List<Order> findAllByFavoriteOfContains(User user);
+
+    List<Order> findAllByDoneBy(User user);
 }

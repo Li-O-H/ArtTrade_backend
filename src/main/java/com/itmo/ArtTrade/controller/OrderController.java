@@ -26,12 +26,16 @@ public class OrderController {
                                        @RequestParam(required = false) Float maxPrice,
                                        @RequestParam(required = false) Long categoryId,
                                        @RequestParam(required = false) Long userId,
-                                       @RequestParam(required = false) Long favoriteByUserId) {
+                                       @RequestParam(required = false) Long favoriteByUserId,
+                                       @RequestParam(required = false) Long doneByUserId) {
         if (userId != null) {
             return ResponseEntity.ok(orderService.findUserOrders(userId));
         }
         if (favoriteByUserId != null) {
             return ResponseEntity.ok(orderService.findFavoriteOrdersByUser(favoriteByUserId));
+        }
+        if (doneByUserId != null) {
+            return ResponseEntity.ok(orderService.findDoneOrdersByUser(doneByUserId));
         }
         return ResponseEntity.ok(orderService.findActiveOrders(minPrice, maxPrice, categoryId));
     }
@@ -66,7 +70,7 @@ public class OrderController {
     }
 
     @PutMapping(value = "/{id}/complete", params = {"email"})
-    public ResponseEntity<?> completeOrder(@PathVariable Long id, @RequestParam String email) {
+    public ResponseEntity<?> completeOrder(@PathVariable Long id, @RequestParam(required = false) String email) {
         orderService.completeOrder(id, email);
         return ResponseEntity.ok().build();
     }

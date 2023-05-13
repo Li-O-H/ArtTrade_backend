@@ -75,6 +75,11 @@ public class OrderService {
         return orderRepository.findAllByFavoriteOfContains(user);
     }
 
+    public List<Order> findDoneOrdersByUser(Long userId) {
+        User user = userService.findById(userId);
+        return orderRepository.findAllByDoneBy(user);
+    }
+
     public Order save(OrderCreatePayload payload) {
         authorizationService.invokerEqualsUserCheck(payload.getUserId());
         User user = userService.findById(payload.getUserId());
