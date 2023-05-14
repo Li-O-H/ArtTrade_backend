@@ -26,6 +26,12 @@ public class ItemFeedbackController {
         return ResponseEntity.ok(itemFeedbackService.findUserItemFeedbacks(userId));
     }
 
+    @Operation(summary = "Получить все отзывы о предмете")
+    @GetMapping(value = "/item")
+    public ResponseEntity<?> getItemFeedbacksByItem(@RequestParam Long itemId) {
+        return ResponseEntity.ok(itemFeedbackService.findItemItemFeedbacks(itemId));
+    }
+
     @Operation(summary = "Добавить отзыв о предмете")
     @PostMapping
     public ResponseEntity<?> addItemFeedback(@RequestBody @Valid ItemFeedbackCreatePayload itemFeedback) {

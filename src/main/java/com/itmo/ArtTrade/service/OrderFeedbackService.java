@@ -35,6 +35,11 @@ public class OrderFeedbackService {
         return orderFeedbackRepository.findAllByUser(user);
     }
 
+    public List<OrderFeedback> findOrderOrderFeedbacks(Long orderId) {
+        Order order = orderService.findById(orderId);
+        return orderFeedbackRepository.findAllByOrder(order);
+    }
+
     public OrderFeedback save(OrderFeedbackCreatePayload payload) {
         User user = userService.findById(payload.getUserId());
         authorizationService.invokerEqualsUserCheck(user.getId());

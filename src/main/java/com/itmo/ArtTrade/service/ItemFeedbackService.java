@@ -35,6 +35,11 @@ public class ItemFeedbackService {
         return itemFeedbackRepository.findAllByUser(user);
     }
 
+    public List<ItemFeedback> findItemItemFeedbacks(Long itemId) {
+        Item item = itemService.findById(itemId);
+        return itemFeedbackRepository.findAllByItem(item);
+    }
+
     public ItemFeedback save(ItemFeedbackCreatePayload payload) {
         User user = userService.findById(payload.getUserId());
         authorizationService.invokerEqualsUserCheck(user.getId());

@@ -26,6 +26,12 @@ public class OrderBidController {
         return ResponseEntity.ok(orderBidService.findUserOrderBids(userId));
     }
 
+    @Operation(summary = "Получить все ставки на заказ")
+    @GetMapping(value = "/order")
+    public ResponseEntity<?> getOrderBidsByOrder(@RequestParam Long orderId) {
+        return ResponseEntity.ok(orderBidService.findOrderOrderBids(orderId));
+    }
+
     @Operation(summary = "Добавить ставку на заказ")
     @PostMapping
     public ResponseEntity<?> addOrderBid(@RequestBody @Valid OrderBidCreatePayload orderBid) {

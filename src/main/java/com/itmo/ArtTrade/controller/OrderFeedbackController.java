@@ -26,6 +26,12 @@ public class OrderFeedbackController {
         return ResponseEntity.ok(orderFeedbackService.findUserOrderFeedbacks(userId));
     }
 
+    @Operation(summary = "Получить все отзывы о заказе")
+    @GetMapping(value = "/order")
+    public ResponseEntity<?> getOrderFeedbacksByOrder(@RequestParam Long orderId) {
+        return ResponseEntity.ok(orderFeedbackService.findOrderOrderFeedbacks(orderId));
+    }
+
     @Operation(summary = "Добавить отзыв о заказе")
     @PostMapping
     public ResponseEntity<?> addOrderFeedback(@RequestBody @Valid OrderFeedbackCreatePayload orderFeedback) {

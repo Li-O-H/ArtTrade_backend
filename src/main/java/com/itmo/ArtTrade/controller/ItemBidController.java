@@ -26,6 +26,12 @@ public class ItemBidController {
         return ResponseEntity.ok(itemBidService.findUserItemBids(userId));
     }
 
+    @Operation(summary = "Получить все ставки на предмет")
+    @GetMapping(value = "/item")
+    public ResponseEntity<?> getItemBidsByItem(@RequestParam Long itemId) {
+        return ResponseEntity.ok(itemBidService.findItemItemBids(itemId));
+    }
+
     @Operation(summary = "Добавить ставку на предмет")
     @PostMapping
     public ResponseEntity<?> addItemBid(@RequestBody @Valid ItemBidCreatePayload itemBid) {

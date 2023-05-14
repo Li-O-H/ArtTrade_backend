@@ -1,5 +1,6 @@
 package com.itmo.ArtTrade.repository;
 
+import com.itmo.ArtTrade.entity.Order;
 import com.itmo.ArtTrade.entity.OrderFeedback;
 import com.itmo.ArtTrade.entity.User;
 import org.springframework.data.repository.CrudRepository;
@@ -12,4 +13,5 @@ public interface OrderFeedbackRepository extends CrudRepository<OrderFeedback, L
 
     List<OrderFeedback> findAllByUser(User user);
 
+    List<OrderFeedback> findAllByOrder(Order order);
 }

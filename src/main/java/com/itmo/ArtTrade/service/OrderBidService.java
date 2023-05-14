@@ -37,6 +37,11 @@ public class OrderBidService {
         return orderBidRepository.findAllByUser(user);
     }
 
+    public List<OrderBid> findOrderOrderBids(Long orderId) {
+        Order order = orderService.findById(orderId);
+        return orderBidRepository.findAllByOrder(order);
+    }
+
     public OrderBid save(OrderBidCreatePayload payload) {
         User user = userService.findById(payload.getUserId());
         authorizationService.invokerEqualsUserCheck(user.getId());

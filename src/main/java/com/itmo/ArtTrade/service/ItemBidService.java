@@ -37,6 +37,11 @@ public class ItemBidService {
         return itemBidRepository.findAllByUser(user);
     }
 
+    public List<ItemBid> findItemItemBids(Long itemId) {
+        Item item = itemService.findById(itemId);
+        return itemBidRepository.findAllByItem(item);
+    }
+
     public ItemBid save(ItemBidCreatePayload payload) {
         User user = userService.findById(payload.getUserId());
         authorizationService.invokerEqualsUserCheck(user.getId());
@@ -45,6 +50,7 @@ public class ItemBidService {
                 .setItem(item)
                 .setUser(user)
                 .setPrice(payload.getPrice());
+        mailService.sendBidCreateNotification(item.getUser().getEmail(), user, payload.getPrice(), item.getTitle());
         return itemBidRepository.save(itemBid);
     }
 
