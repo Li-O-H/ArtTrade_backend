@@ -31,7 +31,8 @@ public class MailService {
         simpleMail.setFrom("leon4ik25022002@gmail.com");
         simpleMail.setTo(toEmail);
         simpleMail.setSubject("Новое предложение по объявлению " + title);
-        simpleMail.setText(MessageFormat.format("Пользователь {0} ({1}) предложил цену {2} рублей", fromUser.getName(), fromUser.getEmail(), String.valueOf(price)));
+        simpleMail.setText(MessageFormat.format("Пользователь {0} ({1}) предложил цену {2} рублей",
+                fromUser.getName(), fromUser.getEmail(), String.valueOf(price)));
         mailSender.send(simpleMail);
     }
 
@@ -40,7 +41,8 @@ public class MailService {
         simpleMail.setFrom("leon4ik25022002@gmail.com");
         simpleMail.setTo(toEmail);
         simpleMail.setSubject("Отменено предложение по объявлению " + title);
-        simpleMail.setText(MessageFormat.format("Пользователь {0} ({1}) отменил предложение цены {2} рублей", fromUser.getName(), fromUser.getEmail(), String.valueOf(price)));
+        simpleMail.setText(MessageFormat.format("Пользователь {0} ({1}) отменил предложение цены {2} рублей",
+                fromUser.getName(), fromUser.getEmail(), String.valueOf(price)));
         mailSender.send(simpleMail);
     }
 }
