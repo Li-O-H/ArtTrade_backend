@@ -48,6 +48,7 @@ public class OrderBidService {
         Order order = orderService.findById(payload.getOrderId());
         OrderBid orderBid = new OrderBid()
                 .setOrder(order)
+                .setUser(user)
                 .setPrice(payload.getPrice());
         mailService.sendBidCreateNotification(order.getUser().getEmail(), user, payload.getPrice(), order.getTitle());
         return orderBidRepository.save(orderBid);
